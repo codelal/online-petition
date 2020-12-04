@@ -1,5 +1,15 @@
 *{
     background-color: lavenderblush;
     box-sizing: border-box;
-    margin-left: 0;  
+    margin: 0;  
+}
+
+canvas{
+    border: 0.1rem solid black;
+    margin: 0.5rem;
+}
+
+footer{
+    position: absolute;
+    margin-bottom: 0;
 }

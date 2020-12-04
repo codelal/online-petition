@@ -12,14 +12,15 @@ module.exports.NameAndSignature = (firstName, lastName, signature) => {
 // inserts are composed of INSERT INTO tableName (columnWeWantToAddValueInto, columnWeWantToAddValueInto)
 
 module.exports.getNames = () => {
-    const q = `SELECT first, second 
-               FROM petition`;
+    const q = `SELECT first, last 
+               FROM signatures`;
     return db.query(q);
 };
 
 
+
 module.exports.getTotalOfSigners = () => {
     const q = `SELECT COUNT(first) 
-               FROM petition`;
+               FROM signatures`;
     return db.query(q);
 };

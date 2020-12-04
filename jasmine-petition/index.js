@@ -1,9 +1,14 @@
 const express = require("express");
 const app = express();
+const hb = require("express-handlebars");
 const db = require("./db");
 const cookieSession = require("cookie-session");
 //const cookieParser = require("cookie-parser");
-const hb = require("express-handlebars");
+//const csurf = require("csurf"); not finished
+
+app.engine("handlebars", hb());
+app.set("view engine", "handlebars");
+//app.use(cookieParser());
 
 app.use(
     cookieSession({
@@ -12,15 +17,12 @@ app.use(
     })
 );
 
-app.engine("handlebars", hb());
-app.set("view engine", "handlebars");
-//app.use(cookieParser());
-
 app.use(
     express.urlencoded({
         extended: false,
-    })
-);
+    }));
+
+//app.use(csurf()); //protect against CSURF - not finished
 
 app.use((req, res, next) => {
     console.log("-------");
@@ -32,8 +34,11 @@ app.use((req, res, next) => {
             next();
         }
     } else {
-        
-    }*/ next();
+   
+    }*/ 
+    res.set("x-frame-options", "DENY"); //protect against framing
+   // res.locals.csrfToken = req.csrfToken();//protect against CSURF - not finished
+    next();
 });
 
 app.use(express.static("./public"));
@@ -53,8 +58,11 @@ app.post("/petition", (req, res) => {
     // console.log(firstName, secondName, signature);
     db.NameAndSignature(firstName, secondName, signature)
         .then(() => {
-            console.log("it worked");
-            res.sendStatus(200);
+            // console.log("it worked");
+            if (firstName && secondName && signature) {
+                //res.cookie("petitionSigned", true);
+                res.redirect("/thanks");
+            }
         })
         .catch((err) => {
             console.log("error in db.NameAndSignature", err);
@@ -62,18 +70,19 @@ app.post("/petition", (req, res) => {
                 layout: "main",
             });
         });
-
-    if (firstName && secondName && signature) {
-        //res.cookie("petitionSigned", true);
-        res.redirect("/thanks");
-    }
 });
 
 app.get("/thanks", (req, res) => {
-    //if (req.cookies.petitionSigned) {
-    res.render("thanks", {
-        layout: "main",
+    db.getTotalOfSigners().then(({ rows }) => {
+        console.log(rows);
+        res.render("thanks", {
+            layout: "main",
+            rows,
+        });
     });
+
+    //if (req.cookies.petitionSigned) {
+
     // } else {
     //     res.redirect("/petition");
     // }
@@ -85,9 +94,18 @@ app.get("/signers", (req, res) => {
     //         layout: "main",
     //     });
     // } else {
-    res.render("signers", {
-        layout: "main",
-    });
+
+    db.getNames()
+        .then(({ rows }) => {
+            // console.log("result from getNames", rows);
+            res.render("signers", {
+                layout: "main",
+                rows,
+            });
+        })
+        .catch((err) => {
+            console.log("error in db.getNames", err);
+        });
     // }
 });
 
