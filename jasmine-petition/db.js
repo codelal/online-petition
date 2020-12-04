@@ -3,7 +3,7 @@ const db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
 //spicedPg("whoAreWeTalkingTo:whichDBUserWillRunMyCommands:theUserPasswordForOurDbUser@PostgrePort/nameOfDatabase")
 
 module.exports.NameAndSignature = (firstName, lastName, signature) => {
-    const q = `INSERT INTO petition (first, last, signature)
+    const q = `INSERT INTO signatures (first, last, signature)
     VALUES ($1 , $2 , $3)`;
     const params = [firstName, lastName, signature];
     return db.query(q, params);
