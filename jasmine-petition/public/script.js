@@ -25,12 +25,9 @@
     });
 
     canvas.on("mouseup", function () {
-        //console.log("mouseup");
         clickStart = false;
         dataUrl = canvas[0].toDataURL();
-        //console.log(dataUrl);
-        //canvasInput.val(`"${dataUrl}"`);
         canvasInput.val(dataUrl);
-        //console.log(canvasInput.val());
+        console.log(canvasInput.val());
     });
 })();

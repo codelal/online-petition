@@ -55,7 +55,7 @@ app.get("/petition", (req, res) => {
 
 app.post("/petition", (req, res) => {
     const { firstName, secondName, signature } = req.body;
-    console.log(firstName, secondName, signature);
+   // console.log(firstName, secondName, signature);
     db.NameAndSignature(firstName, secondName, signature)
         .then(() => {
             // console.log("it worked");

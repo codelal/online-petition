@@ -7,4 +7,6 @@ DROP TABLE IF EXISTS signatures;
      signature VARCHAR NOT NULL CHECK (signature != '')
  );
 
+--DELETE FROM signatures;
+
  --TEST-- INSERT INTO signatures(first, last, signature) VALUES ('Leonardo', 'DiCaprio', 'signa');
