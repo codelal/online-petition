@@ -2,14 +2,42 @@
     background-color: lavenderblush;
     box-sizing: border-box;
     margin: 0;  
+    text-align: center;
+}
+
+body{
+   height: 100vh;
+}
+
+
+h1{
+    margin: 1rem;
+}
+
+input{
+    margin: 1rem;
 }
 
 canvas{
     border: 0.1rem solid black;
-    margin: 0.5rem;
+    margin: 1rem;
 }
 
+
+button{
+    border: 0.1rem solid black; 
+    width: 7rem;
+    height: 3rem;
+    margin: 1rem;
+    color:white;
+    background-color: black;
+}
+
+
 footer{
+    font-size:1rem;
     position: absolute;
-    margin-bottom: 0;
+    margin-top: 20rem;
+    left:50%;
+    transform: translateX(-50%);
 }

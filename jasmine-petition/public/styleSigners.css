@@ -1,0 +1,16 @@
+
+h2{
+    margin:1rem;
+}
+
+p{
+    font-size: 1.5rem;
+}
+
+footer{
+    font-size:1rem;
+    position: absolute;
+    margin-top:16rem;
+    left:50%;
+    transform: translateX(-50%);
+}

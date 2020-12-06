@@ -1,0 +1,27 @@
+/**{
+    background-color: rgb(139, 237, 139);
+}*/
+
+h3{
+    margin: 2rem;
+    font-size: 1.5rem;
+}
+
+div{
+    font-size: 1.5rem;
+    margin: 2rem;
+}
+
+.canvas{
+    height:100px;
+    width:400px;
+    border:0.15rem solid black;
+}
+
+footer{
+    font-size:1rem;
+    position: absolute;
+    margin-top: 10rem;
+    left:50%;
+    transform: translateX(-50%);
+}
