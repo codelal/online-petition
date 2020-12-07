@@ -1,15 +1,6 @@
 const spicedPg = require("spiced-pg");
 const db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
-//spicedPg("whoAreWeTalkingTo:whichDBUserWillRunMyCommands:theUserPasswordForOurDbUser@PostgrePort/nameOfDatabase")
 
-// inserts are composed of INSERT INTO tableName (columnWeWantToAddValueInto, columnWeWantToAddValueInto)
-
-// module.exports.NameAndSignature = (firstName, lastName, signature) => {
-//     const q = `INSERT INTO signatures (first, last, signature)
-//     VALUES ($1 , $2 , $3)`;
-//     const params = [firstName, lastName, signature];
-//     return db.query(q, params);
-// };
 
 module.exports.NameAndSignature = (firstName, lastName, signature) => {
     return db.query(
@@ -34,4 +25,13 @@ module.exports.getTotalOfSigners = () => {
 module.exports.getDataOfSignature = (id) => {
     const signData = `SELECT signature FROM signatures WHERE id = ${id}`;
     return db.query(signData);
+};
+
+exports.insertDetails = (firstName, lastName, emailadress, hashedPW) => {
+    return db.query(
+        `INSERT INTO users (first, last, email, password)
+        VALUES($1, $2, $3, $4)
+        RETURNING id`,
+        [firstName, lastName, emailadress, hashedPW]
+    );
 };

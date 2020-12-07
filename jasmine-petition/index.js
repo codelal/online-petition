@@ -3,6 +3,9 @@ const app = express();
 const hb = require("express-handlebars");
 const db = require("./db");
 const cookieSession = require("cookie-session");
+
+const { hash, compare, insertDatails } = require("./bc");
+
 //const csurf = require("csurf"); not finished
 let idCookie;
 //console.log(idCookie);
@@ -33,19 +36,55 @@ app.use((req, res, next) => {
     res.set("x-frame-options", "DENY"); //protect against framing
     // res.locals.csrfToken = req.csrfToken();//protect against CSURF - not finished
     ////
-    if (!req.session.userId) {
-        if (req.url !== "/petition") {
-            res.redirect("/petition");
-        } else {
-            next();
-        }
-    } else {
-        next();
-    }
+    // if (!req.session.userId) {
+    //     if (req.url !== "/petition") {
+    //         res.redirect("/petition");
+    //     } else {
+    //         next();
+    //     }
+    // } else {
+    next();
+    // }
 });
 
 app.get("/", (req, res) => {
-    res.redirect("/petition");
+    res.redirect("/register");
+});
+
+app.get("/register", (req, res) => {
+    res.render("register", {
+        layout: "main",
+    });
+});
+
+app.post("/register", (req, res) => {
+    //console.log(req.body);
+    const { firstName, lastName, email, password } = req.body;
+    hash(password)
+        .then((hash) => {
+            //  console.log("this is the hash", hash);
+            db.insertDetails(firstName, lastName, email, hash).then(
+                (result) => {
+                    //console.log(result);
+                    req.session.hash = result.rows[0].id;
+                    idCookie = req.session.hash;
+                    //console.log(idCookie);
+                }
+            );
+        })
+        .catch((err) => {
+            console.log("there is an error in hash", err);
+            res.render("register", {
+                layout: "main",
+                error: "Something went wrong, try again!",
+            });
+        });
+});
+
+app.get("/login", (req, res) => {
+    res.render("login", {
+        layout: "main",
+    });
 });
 
 app.get("/petition", (req, res) => {
@@ -59,11 +98,11 @@ app.get("/petition", (req, res) => {
 });
 
 app.post("/petition", (req, res) => {
-    const { firstName, secondName, signature } = req.body;
+    // const { firstName, secondName, signature } = req.body;
     // console.log(firstName, secondName, signature);
-    db.NameAndSignature(firstName, secondName, signature)
+    db.NameAndSignature(firstName, lastName, signature)
         .then((result) => {
-            if (firstName && secondName && signature) {
+            if (firstName && lastName && signature) {
                 req.session.userId = result.rows[0].id;
                 idCookie = req.session.userId;
                 res.redirect("/thanks");
