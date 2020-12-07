@@ -19,6 +19,12 @@ exports.hash = (plainTextPw) => {
 
 
 
-//COMPARE will be for when the user logs in
-// this function compares what the user typed in with hash in db
+// COMPARE will compare what the user typed in with our hashed password in the db
+// this will be for when the user logs in!!!
 exports.compare = compare;
+// compare takes 2 arguments
+// 1st arg - password user sends from the client
+// 2nd arg - hashed password stored in db
+
+// if it matches, boolean TRUE
+// if it doesn't, boolean FALSE

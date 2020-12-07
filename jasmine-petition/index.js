@@ -4,12 +4,13 @@ const hb = require("express-handlebars");
 const db = require("./db");
 const cookieSession = require("cookie-session");
 
-const { hash, compare, insertDatails } = require("./bc");
+const { hash, compare } = require("./bc");
 
 //const csurf = require("csurf"); not finished
 let idCookie;
 //console.log(idCookie);
 let dataUrlsignature;
+let hashFromDb;
 
 app.use(
     cookieSession({
@@ -63,21 +64,20 @@ app.post("/register", (req, res) => {
     hash(password)
         .then((hash) => {
             //  console.log("this is the hash", hash);
-            db.insertDetails(firstName, lastName, email, hash).then(
-                (result) => {
-                    //console.log(result);
+            db.insertDetails(firstName, lastName, email, hash)
+                .then((result) => {
                     req.session.hash = result.rows[0].id;
-                    idCookie = req.session.hash;
-                    //console.log(idCookie);
-                }
-            );
+                    res.redirect("/login");
+                })
+                .catch(() => {
+                    res.render("register", {
+                        layout: "main",
+                        error: "Something went wrong, try again!",
+                    });
+                });
         })
         .catch((err) => {
             console.log("there is an error in hash", err);
-            res.render("register", {
-                layout: "main",
-                error: "Something went wrong, try again!",
-            });
         });
 });
 
@@ -85,6 +85,37 @@ app.get("/login", (req, res) => {
     res.render("login", {
         layout: "main",
     });
+});
+
+app.post("/login", (req, res) => {
+    const { email, password } = req.body;
+    db.getHashByEmail(email)
+        .then((hash) => {
+            hashFromDb = hash.rows[0].password;
+
+            compare(password, hashFromDb)
+                .then((result) => {
+                    if (result) {
+                        req.session.userId = hash.rows[0].id;
+                        //  console.log(req.session.userId);
+                    }
+////////////////////////////////
+                    db.checkSignatureByUserId(hash.rows[0].id)
+                        .then((result) => {
+                            console.log("results", result);
+                            res.redirect("/thanks");
+                        })
+                        .catch((err) => {
+                            console.log("error in checkSignatureByUserId", err);
+                        });
+                })
+                .catch((err) => {
+                    console.log("error in compare", err);
+                });
+        })
+        .catch((err) => {
+            console.log("error in getHashByEmail", err);
+        });
 });
 
 app.get("/petition", (req, res) => {
@@ -98,8 +129,8 @@ app.get("/petition", (req, res) => {
 });
 
 app.post("/petition", (req, res) => {
-    // const { firstName, secondName, signature } = req.body;
-    // console.log(firstName, secondName, signature);
+    const { firstName, lastName, signature } = req.body;
+    // console.log(firstName, lastName, signature);
     db.NameAndSignature(firstName, lastName, signature)
         .then((result) => {
             if (firstName && lastName && signature) {
