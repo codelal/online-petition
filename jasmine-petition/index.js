@@ -10,9 +10,6 @@ const { hash, compare } = require("./bc");
 
 //console.log(idCookie);
 let dataUrlsignature;
-let hashFromDb;
-let idFromUsers;
-let idFromSignatures;
 
 app.use(
     cookieSession({
@@ -75,9 +72,17 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-    res.render("login", {
-        layout: "main",
-    });
+    if (req.session.userId) {
+        if (req.session.sigId) {
+            res.redirect("/thanks");
+        } else {
+            res.render("petition", {
+                layout: "main",
+            });
+        }
+    } else {
+        res.render("login");
+    }
 });
 
 app.post("/login", (req, res) => {
