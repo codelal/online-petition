@@ -48,3 +48,17 @@ module.exports.checkIfSignatureByUserId =(userId) =>{
         `SELECT id FROM signatures WHERE user_Id = ($1)`,[userId]
     );
 };
+
+module.exports.insertDataUserProfile = (age, city, url, userId)=>{
+    return db.query(
+        `INSERT INTO user_profiles (age, city, url, user_Id)
+    VALUES($1, $2, $3, $4)`,
+        [age || null, city || null, url || null, userId]
+    );
+
+};
+
+// module.exports.getDataForSigners = (first, last, age, city, url)=>{
+//     SELECT 
+    
+// };

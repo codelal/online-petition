@@ -8,8 +8,8 @@ const { hash, compare } = require("./bc");
 
 //const csurf = require("csurf"); not finished
 
-//console.log(idCookie);
 let dataUrlsignature;
+let validUrlUserHp;
 
 app.use(
     cookieSession({
@@ -56,7 +56,7 @@ app.post("/register", (req, res) => {
             db.insertDetails(firstName, lastName, email, hash)
                 .then((result) => {
                     req.session.userId = result.rows[0].id;
-                    res.redirect("/login");
+                    res.redirect("/profile");
                     //console.log("req.session.userId", req.session.userId);
                 })
                 .catch(() => {
@@ -150,7 +150,7 @@ app.get("/petition", (req, res) => {
 app.post("/petition", (req, res) => {
     const { signature } = req.body;
     // console.log(firstName, lastName, signature);
-    db.insertSignatureAndUserId(signature, req.session.userId) //idFromUsers
+    db.insertSignatureAndUserId(signature, req.session.userId)
         .then((result) => {
             req.session.sigId = result.rows[0].id;
             res.redirect("/thanks");
@@ -204,6 +204,33 @@ app.get("/signers", (req, res) => {
     } else {
         res.redirect("/register");
     }
+});
+
+app.get("/profile", (req, res) => {
+    if (req.session.userId) {
+        res.render("profile");
+    } else {
+        res.redirect("/register");
+    }
+});
+
+app.post("/profile", (req, res) => {
+    const { age, city, url } = req.body;
+    // let userId = req.session.userId;
+
+    if (url.startsWith("https://") || url.startsWith("http://")) {
+        validUrlUserHp = url;
+        // console.log(validUrlUserHp);
+    } else {
+        validUrlUserHp = "";
+    }
+
+    db.insertDataUserProfile(
+        age,
+        city,
+        validUrlUserHp,
+        req.session.userId
+    );
 });
 
 app.listen(8080, () => console.log("Petitionserver listening"));
