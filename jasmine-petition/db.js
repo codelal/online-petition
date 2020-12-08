@@ -1,12 +1,12 @@
 const spicedPg = require("spiced-pg");
 const db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
 
-module.exports.NameAndSignature = (firstName, lastName, signature) => {
+module.exports.insertSignatureAndUserId = (signature, userId) => {
     return db.query(
-        `INSERT INTO signatures (first, last, signature)
-    VALUES ($1 , $2 , $3)
+        `INSERT INTO signatures (signature, user_Id)
+    VALUES ($1 , $2)
     RETURNING id`,
-        [firstName, lastName, signature]
+        [signature, userId]
     );
 };
 
@@ -17,7 +17,7 @@ module.exports.getNames = () => {
 };
 
 module.exports.getTotalOfSigners = () => {
-    const number = `SELECT COUNT(first) 
+    const number = `SELECT COUNT(id) 
                FROM signatures`;
     return db.query(number);
 };
@@ -38,12 +38,14 @@ module.exports.insertDetails = (firstName, lastName, emailadress, hashedPW) => {
 
 module.exports.getHashByEmail = (emailadress) => {
     return db.query(
-        `SELECT password, id FROM users WHERE email = ($1)`,[emailadress]
+        `SELECT password, id FROM users WHERE email = ($1)`,
+        [emailadress]
     );
 };
 
-module.exports.checkSignatureByUserId =(userId) =>{
+//do a db query to find out if they've signed: if there is a id, they have signed
+module.exports.checkIfSignatureByUserId =(userId) =>{
     return db.query(
-        `SELECT id FROM signatures WHERE userId = {S1}`,[userId]
+        `SELECT id FROM signatures WHERE user_Id = {S1}`,[userId]
     );
 };

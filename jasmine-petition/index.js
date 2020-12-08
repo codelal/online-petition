@@ -7,10 +7,11 @@ const cookieSession = require("cookie-session");
 const { hash, compare } = require("./bc");
 
 //const csurf = require("csurf"); not finished
-let idCookie;
+let idFromSignatures;
 //console.log(idCookie);
 let dataUrlsignature;
 let hashFromDb;
+let idFromUsers;
 
 app.use(
     cookieSession({
@@ -68,6 +69,8 @@ app.post("/register", (req, res) => {
                 .then((result) => {
                     req.session.hash = result.rows[0].id;
                     res.redirect("/login");
+                    idFromUsers = req.session.hash;
+                    console.log("idFromUsers", idFromUsers);
                 })
                 .catch(() => {
                     res.render("register", {
@@ -92,22 +95,29 @@ app.post("/login", (req, res) => {
     db.getHashByEmail(email)
         .then((hash) => {
             hashFromDb = hash.rows[0].password;
+            //console.log("hashFromDb", hashFromDb);
 
             compare(password, hashFromDb)
                 .then((result) => {
                     if (result) {
+                        //store the userId in a cookie
                         req.session.userId = hash.rows[0].id;
-                        //  console.log(req.session.userId);
+                        idFromUsers = req.session.userId;
+                        // console.log("id from users in compare", idFromUsers);
+                        db.checkIfSignatureByUserId(idFromUsers)
+                            .then((result) => { 
+                                console.log("results", result);
+                                res.session.sigId = result.rows[0].id;
+                                idFromSignatures = res.session.sigId;
+                                res.redirect("/thanks");
+                            })
+                            .catch((err) => {
+                                console.log(
+                                    "error in checkIfSignatureByUserId",
+                                    err
+                                );
+                            });
                     }
-////////////////////////////////
-                    db.checkSignatureByUserId(hash.rows[0].id)
-                        .then((result) => {
-                            console.log("results", result);
-                            res.redirect("/thanks");
-                        })
-                        .catch((err) => {
-                            console.log("error in checkSignatureByUserId", err);
-                        });
                 })
                 .catch((err) => {
                     console.log("error in compare", err);
@@ -119,28 +129,27 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/petition", (req, res) => {
-    if (req.session.userId) {
-        res.redirect("/thanks");
-    } else {
-        res.render("petition", {
-            layout: "main",
-        });
-    }
+    // if (idFromSignatures) {
+    //     res.redirect("/thanks");
+    // } else {
+    res.render("petition", {
+        layout: "main",
+    });
+    // }
 });
 
 app.post("/petition", (req, res) => {
-    const { firstName, lastName, signature } = req.body;
+    const { signature } = req.body;
     // console.log(firstName, lastName, signature);
-    db.NameAndSignature(firstName, lastName, signature)
+    db.insertSignatureAndUserId(signature, idFromUsers) //idFromUsers
         .then((result) => {
-            if (firstName && lastName && signature) {
-                req.session.userId = result.rows[0].id;
-                idCookie = req.session.userId;
-                res.redirect("/thanks");
-            }
+            req.session.sigId = result.rows[0].id;
+            idFromSignatures = req.session.sigId;
+            res.redirect("/thanks");
+            console.log("signatures inserted und redirected to thanks");
         })
         .catch((err) => {
-            console.log("error in db.NameAndSignature", err);
+            console.log("error in SignatureAndUserId", err);
             res.render("petition", {
                 layout: "main",
             });
@@ -148,7 +157,7 @@ app.post("/petition", (req, res) => {
 });
 
 app.get("/thanks", (req, res) => {
-    db.getDataOfSignature(idCookie).then((result) => {
+    db.getDataOfSignature(idFromSignatures).then((result) => {
         dataUrlsignature = result.rows[0].signature;
     });
     db.getTotalOfSigners().then(({ rows }) => {
