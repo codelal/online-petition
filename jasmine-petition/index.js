@@ -13,7 +13,6 @@ let dataUrlsignature;
 let hashFromDb;
 let idFromUsers;
 let idFromSignatures;
-let notSigned = false;
 
 app.use(
     cookieSession({
@@ -37,18 +36,8 @@ app.use(express.static("./public"));
 app.use((req, res, next) => {
     console.log("-------");
     console.log(`${req.method} request coming in on route ${req.url}`);
-    res.set("x-frame-options", "DENY"); //protect against framing
-    // res.locals.csrfToken = req.csrfToken();//protect against CSURF - not finished
-    ////
-    // if (!req.session.userId) {
-    //     if (req.url !== "/petition") {
-    //         res.redirect("/petition");
-    //     } else {
-    //         next();
-    //     }
-    // } else {
+    res.set("x-frame-options", "DENY");
     next();
-    // }
 });
 
 app.get("/", (req, res) => {
@@ -69,11 +58,9 @@ app.post("/register", (req, res) => {
             //  console.log("this is the hash", hash);
             db.insertDetails(firstName, lastName, email, hash)
                 .then((result) => {
-                    req.session.hash = result.rows[0].id;
-                    notSigned = true;
+                    req.session.userId = result.rows[0].id;
                     res.redirect("/login");
-                    idFromUsers = req.session.hash;
-                    // console.log("idFromUsers", idFromUsers);
+                    //console.log("req.session.userId", req.session.userId);
                 })
                 .catch(() => {
                     res.render("register", {
@@ -98,20 +85,17 @@ app.post("/login", (req, res) => {
     db.getHashAndIdByEmail(email)
         .then((hash) => {
             // console.log("hash", hash);
-            hashFromDb = hash.rows[0].password;
-            idFromUsers = hash.rows[0].id;
-            // console.log("idFromUsers in hash", idFromUsers);
 
-            compare(password, hashFromDb)
+            compare(password, hash.rows[0].password)
                 .then((result) => {
                     if (result) {
                         //store the userId in a cookie
-                        req.session.userId = idFromUsers;
-                        db.checkIfSignatureByUserId(idFromUsers)
-                            .then((result) => {
-                                if (!result.rows.length == 0) {
-                                    req.session.sigId = result.rows[0].id;
-                                    notSigned = false;
+                        req.session.userId = hash.rows[0].id;
+
+                        db.checkIfSignatureByUserId(req.session.userId)
+                            .then((r) => {
+                                if (!r.rows.length == 0) {
+                                    req.session.sigId = r.rows[0].id;
                                     res.redirect("/thanks");
                                 } else {
                                     res.redirect("/petition");
@@ -145,13 +129,14 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/petition", (req, res) => {
-    if (req.session.sigId) {
-        res.redirect("/thanks");
-    }
     if (req.session.userId) {
-        res.render("petition", {
-            layout: "main",
-        });
+        if (req.session.sigId) {
+            res.redirect("/thanks");
+        } else {
+            res.render("petition", {
+                layout: "main",
+            });
+        }
     } else {
         res.redirect("/register");
     }
@@ -160,10 +145,9 @@ app.get("/petition", (req, res) => {
 app.post("/petition", (req, res) => {
     const { signature } = req.body;
     // console.log(firstName, lastName, signature);
-    db.insertSignatureAndUserId(signature, idFromUsers) //idFromUsers
+    db.insertSignatureAndUserId(signature, req.session.userId) //idFromUsers
         .then((result) => {
             req.session.sigId = result.rows[0].id;
-            notSigned = false;
             res.redirect("/thanks");
         })
         .catch((err) => {
@@ -175,44 +159,46 @@ app.post("/petition", (req, res) => {
 });
 
 app.get("/thanks", (req, res) => {
-    if (req.session.sigId) {
-        db.getDataOfSignature(req.session.sigId).then((result) => {
-            dataUrlsignature = result.rows[0].signature;
-            db.getTotalOfSigners().then(({ rows }) => {
-                res.render("thanks", {
-                    layout: "main",
-                    rows,
-                    dataUrl: dataUrlsignature,
+    if (req.session.userId) {
+        if (req.session.sigId) {
+            db.getDataOfSignature(req.session.sigId).then((result) => {
+                dataUrlsignature = result.rows[0].signature;
+                db.getTotalOfSigners().then(({ rows }) => {
+                    res.render("thanks", {
+                        layout: "main",
+                        rows,
+                        dataUrl: dataUrlsignature,
+                    });
                 });
             });
-        });
-    } else if(notSigned) {
-        res.render("petition", {
-            layout: "main",
-        });
+        } else {
+            res.redirect("/petition");
+        }
     } else {
         res.redirect("/register");
     }
 });
 
 app.get("/signers", (req, res) => {
-    if (req.session.sigId) {
-        db.getNames()
-            .then(({ rows }) => {
-                // console.log("result from getNames", rows);
-                res.render("signers", {
-                    layout: "main",
-                    rows,
+    if (req.session.userId) {
+        if (req.session.sigId) {
+            db.getNames()
+                .then(({ rows }) => {
+                    // console.log("result from getNames", rows);
+                    res.render("signers", {
+                        layout: "main",
+                        rows,
+                    });
+                })
+                .catch((err) => {
+                    console.log("error in db.getNames", err);
                 });
-            })
-            .catch((err) => {
-                console.log("error in db.getNames", err);
-            });
-    }
-    if (!req.session.userId) {
+        } else {
+            res.redirect("/petition");
+        }
+    } else {
         res.redirect("/register");
-        
-    } 
+    }
 });
 
 app.listen(8080, () => console.log("Petitionserver listening"));
