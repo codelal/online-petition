@@ -89,7 +89,7 @@ app.post("/login", (req, res) => {
     const { email, password } = req.body;
     db.getHashAndIdByEmail(email)
         .then((hash) => {
-            // console.log("hash", hash);
+            console.log("hash", hash);
 
             compare(password, hash.rows[0].password)
                 .then((result) => {
@@ -99,7 +99,8 @@ app.post("/login", (req, res) => {
 
                         db.checkIfSignatureByUserId(req.session.userId)
                             .then((r) => {
-                                if (!r.rows.length == 0) {
+                                console.log("das ist r", r);
+                                if (r.rows.length) {
                                     req.session.sigId = r.rows[0].id;
                                     res.redirect("/thanks");
                                 } else {
@@ -225,12 +226,7 @@ app.post("/profile", (req, res) => {
         validUrlUserHp = "";
     }
 
-    db.insertDataUserProfile(
-        age,
-        city,
-        validUrlUserHp,
-        req.session.userId
-    );
+    db.insertDataUserProfile(age, city, validUrlUserHp, req.session.userId);
 });
 
-app.listen(8080, () => console.log("Petitionserver listening"));
+app.listen(process.env.PORT || 8080, () => console.log("Petitionserver listening"));

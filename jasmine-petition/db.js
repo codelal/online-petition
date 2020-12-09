@@ -59,6 +59,16 @@ module.exports.insertDataUserProfile = (age, city, url, userId)=>{
 };
 
 // module.exports.getDataForSigners = (first, last, age, city, url)=>{
-//     SELECT 
+//     SELECT users.first, users.last, user_profiles.age, user_profiles.city, user_profiles.url, signatures.user_id
+//     FROM user_profiles
+//     LEFT JOIN users
+//     ON user_profiles.user_id = users.id
+//     JOIN signatures
+//     ON signatures.user_id = users.id;
     
-// };
+// // };
+
+// SELECT users.first, users.last, user_profiles.age, user_profiles.city, user_profiles.url, signatures.user_id 
+// FROM  user_profiles
+// LEFT JOIN signatures
+// ON user_profiles.user_id =  signatures.user_id 
