@@ -50,6 +50,7 @@ app.get("/register", (req, res) => {
 app.post("/register", (req, res) => {
     //console.log(req.body);
     const { firstName, lastName, email, password } = req.body;
+
     hash(password)
         .then((hash) => {
             //  console.log("this is the hash", hash);
@@ -151,17 +152,26 @@ app.get("/petition", (req, res) => {
 app.post("/petition", (req, res) => {
     const { signature } = req.body;
     // console.log(firstName, lastName, signature);
-    db.insertSignatureAndUserId(signature, req.session.userId)
-        .then((result) => {
-            req.session.sigId = result.rows[0].id;
-            res.redirect("/thanks");
-        })
-        .catch((err) => {
-            console.log("error in SignatureAndUserId", err);
-            res.render("petition", {
-                layout: "main",
+    if (signature) {
+        db.insertSignatureAndUserId(signature, req.session.userId)
+            .then((result) => {
+                console.log("result from insertSignature", result);
+                req.session.sigId = result.rows[0].id;
+                res.redirect("/thanks");
+            })
+            .catch((err) => {
+                console.log("error in SignatureAndUserId", err);
+                res.render("petition", {
+                    layout: "main",
+                });
             });
+    } else {
+        console.log("no signature");
+        res.render("petition", {
+            layout: "main",
+            noSignature: "You still want to think about it? no problem take you time"
         });
+    }
 });
 
 app.get("/thanks", (req, res) => {
@@ -217,16 +227,40 @@ app.get("/profile", (req, res) => {
 
 app.post("/profile", (req, res) => {
     const { age, city, url } = req.body;
-    // let userId = req.session.userId;
+    let userId = req.session.userId;
 
     if (url.startsWith("https://") || url.startsWith("http://")) {
         validUrlUserHp = url;
         // console.log(validUrlUserHp);
+        db.insertDataUserProfile(age, city, validUrlUserHp, req.session.userId)
+            .then((result) => {
+                //console.log("result1 from Profil insert", result);
+                res.redirect("/petition");
+            })
+            .catch((err) => {
+                console.log("error from insertDataUserProfile", err);
+                res.render("profile", {
+                    layout: "main",
+                    error: "Something went wrong, try again!",
+                });
+            });
     } else {
         validUrlUserHp = "";
+        db.insertDataUserProfile(age, city, validUrlUserHp, req.session.userId)
+            .then(() => {
+                //console.log("result2 from Profil insert", result);
+                res.redirect("/petition");
+            })
+            .catch((err) => {
+                console.log("error from insertDataUserProfile", err);
+                res.render("profile", {
+                    layout: "main",
+                    error: "Something went wrong, try again!",
+                });
+            });
     }
-
-    db.insertDataUserProfile(age, city, validUrlUserHp, req.session.userId);
 });
 
-app.listen(process.env.PORT || 8080, () => console.log("Petitionserver listening"));
+app.listen(process.env.PORT || 8080, () =>
+    console.log("Petitionserver listening")
+);

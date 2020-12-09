@@ -8,3 +8,4 @@
       user_id INT NOT NULL UNIQUE REFERENCES users(id)
     );
 
+
