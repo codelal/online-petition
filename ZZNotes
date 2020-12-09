@@ -1,0 +1,29 @@
+/*pp.get("/:city", (req, res) => {
+    const { city } = req.params;
+    //console.log("city", city);
+    // db.allCitys()
+    //     .then(({ rows }) => {
+    //         for (let i = 0; i < rows.length; i++) {
+    //             if (city == rows[i].city) {
+    db.getSignersByCity(city)
+        .then(({ rows }) => {
+            console.log(rows);
+
+            res.render("signersByCity", {
+                city: city,
+                rows,
+            });
+        })
+        .catch((err) => {
+            console.log("error getSignersByCity", err);
+        });
+    //     }
+    // }
+    // })
+    // .catch((err) => {
+    //     console.log("error from allCitys", err);
+    //     res.render("signersByCity", {
+    //         error: "we haven't signers from this city yet",
+    //     });
+    // });
+});

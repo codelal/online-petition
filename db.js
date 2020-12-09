@@ -10,12 +10,6 @@ module.exports.insertSignatureAndUserId = (signature, userId) => {
     );
 };
 
-module.exports.getNames = () => {
-    const q = `SELECT first, last 
-               FROM users`;
-    return db.query(q);
-};
-
 module.exports.getTotalOfSigners = () => {
     const number = `SELECT COUNT(id) 
                FROM signatures`;
@@ -43,13 +37,11 @@ module.exports.getHashAndIdByEmail = (emailadress) => {
 };
 
 //do a db query to find out if they've signed: if there is a id, they have signed
-module.exports.checkIfSignatureByUserId =(userId) =>{
-    return db.query(
-        `SELECT id FROM signatures WHERE user_Id = ($1)`,[userId]
-    );
+module.exports.checkIfSignatureByUserId = (userId) => {
+    return db.query(`SELECT id FROM signatures WHERE user_Id = ($1)`, [userId]);
 };
 
-module.exports.insertDataUserProfile = (age, city, url, userId)=>{
+module.exports.insertDataUserProfile = (age, city, url, userId) => {
     return db.query(
         `INSERT INTO user_profiles (age, city, url, user_Id)
     VALUES($1, $2, $3, $4)`,
@@ -57,18 +49,33 @@ module.exports.insertDataUserProfile = (age, city, url, userId)=>{
     );
 };
 
-// module.exports.getDataForSigners = (first, last, age, city, url)=>{
-//     // SELECT users.first, users.last, user_profiles.age, user_profiles.city, user_profiles.url, signatures.user_id
-//     SELECT * FROM users
-//     JOIN signatures
-//     ON signatures.user_id = users.id
-//     JOIN user_profiles
-//     ON user_profiles.user_id = users.id;
-    
-    
-// };
+module.exports.getDataForSigners = () => {
+    return db.query(
+        `SELECT users.first, users.last, user_profiles.age, user_profiles.city, user_profiles.url, signatures.user_id
+    FROM users
+    JOIN signatures
+    ON signatures.user_id = users.id
+    JOIN user_profiles
+    ON user_profiles.user_id = users.id`
+    );
+};
 
-// SELECT users.first, users.last, user_profiles.age, user_profiles.city, user_profiles.url, signatures.user_id 
-// FROM  user_profiles
-// LEFT JOIN signatures
-// ON user_profiles.user_id =  signatures.user_id 
+module.exports.getSignersByCity = (city) => {
+    return db.query(
+        `SELECT users.first, users.last, user_profiles.age, user_profiles.url, signatures.user_id
+    FROM users
+    JOIN signatures
+    ON signatures.user_id = users.id
+    JOIN user_profiles  
+    ON user_profiles.user_id = users.id
+    WHERE user_profiles.city = ($1)`,
+        [city]
+    );
+};
+
+module.exports.allCitys = () => {
+    return db.query(`SELECT user_profiles.city
+    FROM user_profiles
+    JOIN signatures
+    ON signatures.user_id = user_profiles.user_id`);
+};

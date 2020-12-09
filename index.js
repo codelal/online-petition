@@ -10,6 +10,7 @@ const { hash, compare } = require("./bc");
 
 let dataUrlsignature;
 let validUrlUserHp;
+let CitysFromSigners;
 
 app.use(
     cookieSession({
@@ -62,7 +63,6 @@ app.post("/register", (req, res) => {
                 })
                 .catch(() => {
                     res.render("register", {
-                        layout: "main",
                         error: "Something went wrong, try again!",
                     });
                 });
@@ -117,7 +117,6 @@ app.post("/login", (req, res) => {
                             });
                     } else {
                         res.render("login", {
-                            layout: "main",
                             error: "Something went wrong, try again!",
                         });
                     }
@@ -129,7 +128,6 @@ app.post("/login", (req, res) => {
         .catch((err) => {
             console.log("error in getHashByEmail", err);
             res.render("login", {
-                layout: "main",
                 error: "Something went wrong, try again!",
             });
         });
@@ -140,9 +138,7 @@ app.get("/petition", (req, res) => {
         if (req.session.sigId) {
             res.redirect("/thanks");
         } else {
-            res.render("petition", {
-                layout: "main",
-            });
+            res.render("petition");
         }
     } else {
         res.redirect("/register");
@@ -161,15 +157,14 @@ app.post("/petition", (req, res) => {
             })
             .catch((err) => {
                 console.log("error in SignatureAndUserId", err);
-                res.render("petition", {
-                    layout: "main",
-                });
+                res.render("petition");
             });
     } else {
         console.log("no signature");
         res.render("petition", {
             layout: "main",
-            noSignature: "You still want to think about it? no problem take you time"
+            noSignature:
+                "You still want to think about it? no problem take you time",
         });
     }
 });
@@ -198,9 +193,9 @@ app.get("/thanks", (req, res) => {
 app.get("/signers", (req, res) => {
     if (req.session.userId) {
         if (req.session.sigId) {
-            db.getNames()
+            db.getDataForSigners()
                 .then(({ rows }) => {
-                    // console.log("result from getNames", rows);
+                    // console.log("result from getDataForSigners",rows);
                     res.render("signers", {
                         layout: "main",
                         rows,
@@ -258,6 +253,29 @@ app.post("/profile", (req, res) => {
                     error: "Something went wrong, try again!",
                 });
             });
+    }
+});
+
+app.get("/:city", (req, res) => {
+    if (req.session.userId) {
+        if (req.session.sigId) {
+            const { city } = req.params;
+            db.getSignersByCity(city)
+                .then(({ rows }) => {
+                    console.log(rows);
+                    res.render("signersByCity", {
+                        city: city,
+                        rows,
+                    });
+                })
+                .catch((err) => {
+                    console.log("error getSignersByCity", err);
+                });
+        } else {
+            res.redirect("/petition");
+        }
+    } else {
+        res.redirect("/register");
     }
 });
 
