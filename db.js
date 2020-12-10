@@ -96,27 +96,38 @@ module.exports.updateUsersWithPassword = (
     lastName,
     email,
     hash,
-    userid
+    userId
 ) => {
     return db.query(
         `
 UPDATE users
 SET first =($1), last=($2), email=($3), password=($4)
 WHERE id = ($5)`,
-        [firstName, lastName, email, hash, userid]
+        [firstName, lastName, email, hash, userId]
     );
 };
 
-//  module.exports.updateUsersWithoutPassword =(firstName, lastName, email, age, city, url){
-
-//  }
-
-module.exports.updateUserProfiles = (age, city, url, userId) => {
+module.exports.updateUsersWithoutPassword = (
+    firstName,
+    lastName,
+    email,
+    userId
+) => {
     return db.query(
-        `INSERT INTO user_profiles (age, city, url)
-      VALUES($1, $2, $3)
-      ON CONFLICT ($4)
-      DO UPDATE SET age = ($1), city = LOWER($2), url = ($3)`,
-        [age, city, url, userId]
+        `
+UPDATE users
+SET first =($1), last=($2), email=($3)
+WHERE id = ($4)`,
+        [firstName, lastName, email, userId]
+    );
+};
+
+module.exports.updateUserProfiles = (userId, age, city, url) => {
+    return db.query(
+        `INSERT INTO user_profiles (user_id, age, city, url)
+      VALUES($1, $2, $3, $4)
+      ON CONFLICT (user_id)
+      DO UPDATE SET age = ($2), city = LOWER($3), url = ($4)`,
+        [userId, age, city, url]
     );
 };

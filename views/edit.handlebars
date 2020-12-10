@@ -1,15 +1,17 @@
-<h1>Edit your profile</h1>
+<h1>Edit your profile</h1> 
+<h3><a href ="/edit">{{error}}</a></h3>
 <h3>You want to change who you are? <b>Please edit your profile</h3>
-<h3>{{error}}</h3>
+
 <form method="POST">
    {{#rows}}  
-    <p>First Name<input type="text" name="firstName" value = {{first}} autocomplete="off"></input></p>
- <p>Last Name<input type="text" name="lastName" value = {{last}} autocomplete="off"></input></p>
- <p>Email<input type="email" name="email" value = {{email}} autocomplete="off"></input></p>
+    <p>First Name<input type="text" name="firstName" value = "{{first}}"" autocomplete="off"></input></p>
+ <p>Last Name<input type="text" name="lastName" value = "{{last}}" autocomplete="off"></input></p>
+ <p>Email<input type="email" name="email" value = "{{email}}"" autocomplete="off"></input></p>
     <p>Password<input type="password" name="password" placeholder = "change password", autocomplete="off"></input></p>
-  <p>age<input type="text" name="age" value = {{age}} autocomplete="off"></input></p>
- <p>city<input type="text" name="city" value = {{city}} autocomplete="off"></input></p> 
- <p>You Hompage<input type="text" name="url" value = {{url}} autocomplete="off"></input></p> 
+  <p>age<input type="text" name="age" value = "{{age}}"" autocomplete="off"></input></p>
+ <p>city<input type="text" name="city" value = "{{city}}" autocomplete="off"></input></p> 
+ <p>You Hompage<input type="text" name="url" value = "{{url}}"" autocomplete="off"></input></p> 
+ <h3><a href ="/edit">{{error}}</a></h3>
  {{/rows}}  
  <input class="csurf" type="hidden" name="csurf" placeholder = "csurf"></input>
     <div><button type="submit">Go!</button>

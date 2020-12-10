@@ -225,7 +225,10 @@ app.get("/profile", (req, res) => {
 });
 
 app.post("/profile", (req, res) => {
-    const { age, city, url } = req.body;
+    let { age, city, url } = req.body;
+    if (age == "") {
+        age = null;
+    }
 
     if (url.startsWith("https://") || url.startsWith("http://")) {
         validUrlUserHp = url;
@@ -274,14 +277,18 @@ app.get("/edit", (req, res) => {
 });
 
 app.post("/edit", (req, res) => {
-    const { firstName, lastName, email, password, age, city, url } = req.body;
+    let { firstName, lastName, email, password, age, city, url } = req.body;
     console.log(firstName, lastName, email, password, age, city, url);
+    if (age == "") {
+        age = null;
+        console.log("age is Null");
+    }
 
     if (password) {
         // console.log("password", password);
         //  console.log(req.session.userId);
         hash(password).then((hash) => {
-            console.log("hash", hash);
+            //console.log("hash", hash);
             db.updateUsersWithPassword(
                 firstName,
                 lastName,
@@ -290,17 +297,57 @@ app.post("/edit", (req, res) => {
                 req.session.userId
             )
                 .then((result) => {
-                    console.log("users updatet", result);
+                    
+
                 })
                 .catch((err) => {
                     console.log("error in updateUsersWithPassword", err);
+                    res.render("edit", {
+                        error: "Something went wrong, try again!",
+                    });
                 });
         });
-        db.updateUserProfiles(age, city, url).then((result) => {
-            console.log(" result updateUserProfiles", result);
-        });
+
+        db.updateUserProfiles(req.session.userId, age, city, url)
+            .then((result) => {
+                //console.log(" result updateUserProfiles", result);
+                //  console.log("users updatet", result);
+                res.redirect("/thanks");
+            })
+            .catch((err) => {
+                console.log("error in updateUserProfiles", err);
+                res.render("edit", {
+                    error: "Something went wrong, try again!",
+                });
+            });
     } else {
         // console.log("no password");
+        db.updateUsersWithoutPassword(
+            firstName,
+            lastName,
+            email,
+            req.session.userId
+        )
+            .then((result) => {
+                //  console.log("result updateUsersWithoutPassword", result);
+            })
+            .catch((err) => {
+                console.log("err pdateUsersWithoutPassword", err);
+                res.render("edit", {
+                    error: "Something went wrong, try again!",
+                });
+            });
+        db.updateUserProfiles(req.session.userId, age, city, url)
+            .then((result) => {
+                // console.log(" result updateUserProfiles", result);
+                res.redirect("/thanks");
+            })
+            .catch((err) => {
+                console.log("error in updateUserProfiles", err);
+                res.render("edit", {
+                    error: "Something went wrong, try again!",
+                });
+            });
     }
 });
 
