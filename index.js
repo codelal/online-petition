@@ -3,14 +3,18 @@ const app = express();
 const hb = require("express-handlebars");
 const db = require("./db");
 const cookieSession = require("cookie-session");
-
 const { hash, compare } = require("./bc");
-
 //const csurf = require("csurf"); not finished
+
+//Für Test
+//const app = (exports.app = express());
+// //alternativ in 2 lines: const app = express();exports.app = app;
+// const { TestScheduler } = require("jest");
+// const supertest = require("supertest");
 
 let dataUrlsignature;
 let validUrlUserHp;
-let CitysFromSigners;
+//let CitysFromSigners;
 
 app.use(
     cookieSession({
@@ -222,13 +226,12 @@ app.get("/profile", (req, res) => {
 
 app.post("/profile", (req, res) => {
     const { age, city, url } = req.body;
-    let userId = req.session.userId;
 
     if (url.startsWith("https://") || url.startsWith("http://")) {
         validUrlUserHp = url;
         // console.log(validUrlUserHp);
         db.insertDataUserProfile(age, city, validUrlUserHp, req.session.userId)
-            .then((result) => {
+            .then(() => {
                 //console.log("result1 from Profil insert", result);
                 res.redirect("/petition");
             })
@@ -256,7 +259,52 @@ app.post("/profile", (req, res) => {
     }
 });
 
-app.get("/:city", (req, res) => {
+app.get("/edit", (req, res) => {
+    db.getProfileData(req.session.userId)
+        .then(({ rows }) => {
+            //console.log("getProfileData result", rows);
+            res.render("edit", {
+                rows,
+            });
+            console.log("req.body", req.body);
+        })
+        .catch((err) => {
+            console.log("error from getProfileData", err);
+        });
+});
+
+app.post("/edit", (req, res) => {
+    const { firstName, lastName, email, password, age, city, url } = req.body;
+    console.log(firstName, lastName, email, password, age, city, url);
+
+    if (password) {
+        // console.log("password", password);
+        //  console.log(req.session.userId);
+        hash(password).then((hash) => {
+            console.log("hash", hash);
+            db.updateUsersWithPassword(
+                firstName,
+                lastName,
+                email,
+                hash,
+                req.session.userId
+            )
+                .then((result) => {
+                    console.log("users updatet", result);
+                })
+                .catch((err) => {
+                    console.log("error in updateUsersWithPassword", err);
+                });
+        });
+        db.updateUserProfiles(age, city, url).then((result) => {
+            console.log(" result updateUserProfiles", result);
+        });
+    } else {
+        // console.log("no password");
+    }
+});
+
+app.get("/signers/:city", (req, res) => {
     if (req.session.userId) {
         if (req.session.sigId) {
             const { city } = req.params;
@@ -279,6 +327,9 @@ app.get("/:city", (req, res) => {
     }
 });
 
-app.listen(process.env.PORT || 8080, () =>
-    console.log("Petitionserver listening")
-);
+//für jest: jest soll server nicht starten)
+if (require.main == module) {
+    app.listen(process.env.PORT || 8080, () =>
+        console.log("Petitionserver listening")
+    );
+}

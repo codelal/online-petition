@@ -68,7 +68,7 @@ module.exports.getSignersByCity = (city) => {
     ON signatures.user_id = users.id
     JOIN user_profiles  
     ON user_profiles.user_id = users.id
-    WHERE user_profiles.city = ($1)`,
+    WHERE user_profiles.city = LOWER ($1)`,
         [city]
     );
 };
@@ -78,4 +78,45 @@ module.exports.allCitys = () => {
     FROM user_profiles
     JOIN signatures
     ON signatures.user_id = user_profiles.user_id`);
+};
+
+module.exports.getProfileData = (userId) => {
+    return db.query(
+        `SELECT users.first, users.last, users.email, user_profiles.age, user_profiles.url, user_profiles.city
+        FROM user_profiles
+        LEFT JOIN  users
+        ON user_profiles.user_id = users.id 
+        WHERE user_profiles.user_id = ($1)`,
+        [userId]
+    );
+};
+
+module.exports.updateUsersWithPassword = (
+    firstName,
+    lastName,
+    email,
+    hash,
+    userid
+) => {
+    return db.query(
+        `
+UPDATE users
+SET first =($1), last=($2), email=($3), password=($4)
+WHERE id = ($5)`,
+        [firstName, lastName, email, hash, userid]
+    );
+};
+
+//  module.exports.updateUsersWithoutPassword =(firstName, lastName, email, age, city, url){
+
+//  }
+
+module.exports.updateUserProfiles = (age, city, url, userId) => {
+    return db.query(
+        `INSERT INTO user_profiles (age, city, url)
+      VALUES($1, $2, $3)
+      ON CONFLICT ($4)
+      DO UPDATE SET age = ($1), city = LOWER($2), url = ($3)`,
+        [age, city, url, userId]
+    );
 };

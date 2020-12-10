@@ -1,7 +1,8 @@
 <h2>We the undersigned demand that driving private Cars will be forbidden in Berlin!</h2>
   {{#rows}}  
   <div class ="container">
-       <p class="ListNames">{{first}} {{last}} {{age}} <a href ="/{{city}}">{{city}}</a> <href="{{url}}">{{url}}</a></p>
+       <p class="ListNames">{{first}} {{last}} {{age}} <a href ="signers/{{city}}">{{city}}</a> <href="{{url}}">{{url}}</a></p>
        <div>
   {{/rows}}
+   <input class="csurf" type="hidden" name="csurf" placeholder = "csurf"></input>
 </div>
