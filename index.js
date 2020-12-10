@@ -155,7 +155,7 @@ app.post("/petition", (req, res) => {
     if (signature) {
         db.insertSignatureAndUserId(signature, req.session.userId)
             .then((result) => {
-                console.log("result from insertSignature", result);
+                //console.log("result from insertSignature", result);
                 req.session.sigId = result.rows[0].id;
                 res.redirect("/thanks");
             })
@@ -176,7 +176,7 @@ app.post("/petition", (req, res) => {
 app.get("/thanks", (req, res) => {
     if (req.session.userId) {
         if (req.session.sigId) {
-            db.getDataOfSignature(req.session.sigId).then((result) => {
+            db.getSignature(req.session.sigId).then((result) => {
                 dataUrlsignature = result.rows[0].signature;
                 db.getTotalOfSigners().then(({ rows }) => {
                     res.render("thanks", {
@@ -192,6 +192,20 @@ app.get("/thanks", (req, res) => {
     } else {
         res.redirect("/register");
     }
+});
+
+app.post("/thanks", (req, res) => {
+    console.log("delete signature");
+    db.deleteSignature(req.session.sigId)
+        .then((result) => {
+            console.log(result);
+            req.session.sigId = false;
+            console.log(req.session.sigId);
+            res.redirect("/petition");
+        })
+        .catch((err) => {
+            console.log("error deleteSignature", err);
+        });
 });
 
 app.get("/signers", (req, res) => {
@@ -296,10 +310,7 @@ app.post("/edit", (req, res) => {
                 hash,
                 req.session.userId
             )
-                .then((result) => {
-                    
-
-                })
+                .then((result) => {})
                 .catch((err) => {
                     console.log("error in updateUsersWithPassword", err);
                     res.render("edit", {

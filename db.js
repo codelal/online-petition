@@ -15,10 +15,11 @@ module.exports.getTotalOfSigners = () => {
                FROM signatures`;
     return db.query(number);
 };
-module.exports.getDataOfSignature = (id) => {
-    const signData = `SELECT signature FROM signatures WHERE id = ($1)`;
-    const userId = [id];
-    return db.query(signData, userId);
+module.exports.getSignature = (sigId) => {
+    return db.query(`SELECT signature FROM signatures WHERE id = ($1)`,[sigId]);
+};
+module.exports.deleteSignature = (sigId) => {
+    return db.query(`DELETE FROM signatures WHERE id = ($1)`, [sigId]);
 };
 
 module.exports.insertDetails = (firstName, lastName, emailadress, hashedPW) => {
