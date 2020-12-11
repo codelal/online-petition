@@ -2,19 +2,15 @@ const express = require("express");
 const app = express();
 const hb = require("express-handlebars");
 const db = require("./db");
-const cookieSession = require("cookie-session");
 const { hash, compare } = require("./bc");
-//const csurf = require("csurf"); not finished
+const cookieSession = require("cookie-session");
+const csurf = require("csurf");
 
 //Für Test
 //const app = (exports.app = express());
 // //alternativ in 2 lines: const app = express();exports.app = app;
 // const { TestScheduler } = require("jest");
 // const supertest = require("supertest");
-
-let dataUrlsignature;
-let validUrlUserHp;
-//let CitysFromSigners;
 
 app.use(
     cookieSession({
@@ -32,15 +28,24 @@ app.use(
     })
 );
 
-app.use(express.static("./public"));
-//app.use(csurf()); //protect against CSURF - not finished
+app.use(csurf());
+
+app.use(function (req, res, next) {
+    res.set("x-frame-options", "DENY");
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
 
 app.use((req, res, next) => {
     console.log("-------");
     console.log(`${req.method} request coming in on route ${req.url}`);
-    res.set("x-frame-options", "DENY");
     next();
 });
+
+app.use(express.static("./public"));
+
+let dataUrlsignature;
+let validUrlUserHp;
 
 app.get("/", (req, res) => {
     res.redirect("/register");

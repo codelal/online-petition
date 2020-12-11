@@ -14,6 +14,6 @@
  <p>You Hompage<input type="text" name="url" value = "{{url}}"" autocomplete="off"></input></p> 
  <h3><a href ="/edit">{{error}}</a></h3>
  {{/rows}}  
- <input class="csurf" type="hidden" name="csurf" placeholder = "csurf"></input>
+  <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <div><button type="submit">Go!</button>
 </form>
