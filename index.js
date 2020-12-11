@@ -12,12 +12,16 @@ const csurf = require("csurf");
 // const { TestScheduler } = require("jest");
 // const supertest = require("supertest");
 
+
+
 app.use(
     cookieSession({
         secret: `pure being and pure nothing are the same.`,
         maxAge: 1000 * 60 * 60 * 24 * 14,
     })
 );
+
+
 
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
