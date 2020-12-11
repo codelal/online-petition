@@ -371,9 +371,11 @@ app.get("/signers/:city", (req, res) => {
     if (req.session.userId) {
         if (req.session.sigId) {
             const { city } = req.params;
+            console.log("city", city);
+            // city.toLocaleLowerCase();
             db.getSignersByCity(city)
                 .then(({ rows }) => {
-                    console.log(rows);
+                    console.log("signers by city", rows);
                     res.render("signersByCity", {
                         city: city,
                         rows,
@@ -395,7 +397,6 @@ app.get("/logout", (req, res) => {
     req.session.sigId = false;
     res.redirect("/register");
 });
-
 
 //für jest: jest soll server nicht starten)
 if (require.main == module) {

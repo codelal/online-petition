@@ -71,7 +71,7 @@ module.exports.getSignersByCity = (city) => {
     ON signatures.user_id = users.id
     JOIN user_profiles  
     ON user_profiles.user_id = users.id
-    WHERE user_profiles.city = LOWER ($1)`,
+    WHERE LOWER(user_profiles.city) = LOWER($1)`,
         [city]
     );
 };
