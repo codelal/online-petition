@@ -281,7 +281,7 @@ app.post("/profile", (req, res) => {
     }
 });
 
-app.get("/edit", (req, res) => {
+app.get("/profile/edit", (req, res) => {
     db.getProfileData(req.session.userId)
         .then(({ rows }) => {
             //console.log("getProfileData result", rows);
@@ -295,7 +295,7 @@ app.get("/edit", (req, res) => {
         });
 });
 
-app.post("/edit", (req, res) => {
+app.post("/profile/edit", (req, res) => {
     let { firstName, lastName, email, password, age, city, url } = req.body;
     console.log(firstName, lastName, email, password, age, city, url);
     if (age == "") {
