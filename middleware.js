@@ -16,7 +16,7 @@ module.exports.requireUnsignedPetition = (req, res, next) => {
 
 module.exports.requireSignedPetition = (req, res, next) => {
     if (!req.session.sigId) {
-        return res.redirect("/thanks");
+        return res.redirect("/petition");
     } else {
         next();
     }

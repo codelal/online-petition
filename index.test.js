@@ -41,4 +41,4 @@ test("POST / welcome works...", () => {
         expect(response.headers.location).toBe("/home");
 
     })
-})
+});
