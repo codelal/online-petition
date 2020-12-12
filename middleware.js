@@ -1,24 +1,22 @@
-
-module.exports.requireLoggedOutUser = (res, req, next) => {
+module.exports.requireLoggedOutUser = (req, res, next) => {
     if (req.session.userId) {
-        res.redirect("/petition");
+        return res.redirect("/petition");
     } else {
         next();
     }
 };
 
-
-module.exports.requireUnsignedPetition = (res, req, next) => {
+module.exports.requireUnsignedPetition = (req, res, next) => {
     if (req.session.sigId) {
-        res.redirect("/thanks");
+        return res.redirect("/thanks");
     } else {
         next();
     }
 };
 
-module.exports.requireSignedPetition = (res, req, next) => {
+module.exports.requireSignedPetition = (req, res, next) => {
     if (!req.session.sigId) {
-        res.redirect("/thanks");
+        return res.redirect("/thanks");
     } else {
         next();
     }
@@ -26,7 +24,7 @@ module.exports.requireSignedPetition = (res, req, next) => {
 
 module.exports.requireLoggedInUser = (req, res, next) => {
     if (!req.session.userId && req.url != "/register" && req.url != "/login") {
-        res.redirect("/register");
+        return res.redirect("/register");
     } else {
         next();
     }
