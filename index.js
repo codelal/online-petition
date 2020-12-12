@@ -12,16 +12,10 @@ const {
     requireLoggedInUser,
 } = require("./middleware");
 
-// exports.app = app;
 
 let dataUrlsignature;
 let validUrlUserHp;
 
-//Für Test
-//const app = (exports.app = express());
-// //alternativ in 2 lines: const app = express();exports.app = app;
-// const { TestScheduler } = require("jest");
-// const supertest = require("supertest");
 
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");

@@ -1,44 +1,66 @@
 const supertest = require("supertest");
 const { app } = require("./index.js"); //bedenke, dass ap auch exported werden muss
-
 const cookieSession = require("cookie-session");
+// console.log("app", app);
 
-console.log("app", app);
-
-//in node: npm test
-
-test("GET /welcome sends a 200 statuscode as a response", () => {
+test("Loggedout Users are redirected to /registration when they attempt to go to the petition page", () => {
     return supertest(app)
-        .get("/welcome")
-        .then((response) => {
-            console.log(response);
-            expect(response.statusCode).toBe(200);
+        .get("/petition")
+        .then((res) => {
+            expect(res.statusCode).toBe(302);
+            expect(res.headers.location).toBe("/register");
         });
-    //returns a promise
+});
+
+test("Logged in users are redirected to /petition when they attempt to go to either the registration page or the login page", () => {
+    cookieSession.mockSessionOnce({
+        userId: 1,
+    });
+    return supertest(app)
+        .get("/register" || "/login")
+        .then((res) => {
+            expect(res.statusCode).toBe(302);
+            expect(res.headers.location).toBe("/petition");
+        });
+});
+
+test("Users Logged in and Signed are redirected to /thanks when they attempt to go to /petition or submit a signature", () => {
+    cookieSession.mockSessionOnce({
+        userId: 1,
+        sigId: 2,
+    });
+    return supertest(app)
+        .get("/petition")
+        .then((res) => {
+            expect(res.statusCode).toBe(302);
+            expect(res.headers.location).toBe("/thanks");
+        });
+});
+
+test("Users who are logged in and have not signed are redirected to /petition when they attempt to go to either the thank you page or the signers page", () => {
+    cookieSession.mockSessionOnce({
+        userId: 1,
+    });
+    return supertest(app)
+        .get("/thanks" || "/signers")
+        .then((res) => {
+            expect(res.statusCode).toBe(302);
+            expect(res.headers.location).toBe("/petition");
+        });
+});
+
+//???The below is  maybe not correct
+test("POST/petition,when the input is good, the user is redirected to the thank you page", () => {
+    cookieSession.mockSessionOnce({
+        userId: 1,
+        sigId: 2,
+    });
+    return supertest(app)
+        .post("/petition")
+        .then((res) => {
+            expect(res.statusCode).toBe(302);
+            expect(res.headers.location).toBe("/thanks");
+        });
 });
 
 
-test("GET/home sends a 302 status code as a response when no cookie"() =>{
-    cookieSession.mockSessionOnce({});
-    return supertest(app).get("/home").then((response => {
-        console.log("response", response.statusCode);
-        expect(response.statusCode).toBe(302);
-    }))
-});
-
-resizeTo("GET / home sends a 200 when there is a cookie" () => {
-cookieSeesion.mockSessionOnce({
-    submitted: true
-})
-return
-});
-
-
-
-test("POST / welcome works...", () => {
-    return supertest(app).post("/welcome").then((response => {expect(response.statusCode).toBe(302)
-        console.log(response.headers);
-        expect(response.headers.location).toBe("/home");
-
-    })
-});
