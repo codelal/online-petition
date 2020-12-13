@@ -1,16 +1,24 @@
 
-h2{
-    margin:1rem;
+
+.demandSigners{
+ font-size: 1.5rem;
+    color: rgba(185, 170, 170, 0.562);
+    text-shadow: 1px 1px rgb(132, 23, 23);
 }
 
-p{
-    font-size: 1.5rem;
+.container a{
+      color: rgb(45, 56, 32);
+      text-shadow: 1px 1px rgb(223, 161, 161);
 }
 
-footer{
-    font-size:1rem;
-    position: absolute;
-    margin-top:16rem;
-    left:50%;
-    transform: translateX(-50%);
+.ListNames{
+    color: rgb(45, 56, 32);
+     text-shadow: 1px 1px rgb(223, 161, 161);
+    font-size: 1.5rem
 }
+
+.container{
+      margin-top: 1rem;
+       
+}
+

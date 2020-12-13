@@ -1,9 +1,15 @@
-<h1>Login</h1>
-<h3>{{error}}</h3>
+<div class="flexcontainer">
+<h1 class="loginPage">Login</h1>
 
+</div>
+<div class ="error">{{error}}</div>
+<div class="flexcontainer">
+
+ <div class="loginRegister">
 <form method="POST">
-  <p>Email<input type="email" name="email" placeholder = "emailadress", autocomplete="off"></input></p>
-    <p>Password<input type="password" name="password" placeholder = "password", autocomplete="off"></input></p>
+  <input type="email" name="email" placeholder = "emailadress", autocomplete="off"></input>
+   <input type="password" name="password" placeholder = "password", autocomplete="off"></input>
       <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <div><button type="submit">Go!</button>
+    <button type="submit">Login</button>
+    </div>
 </form>

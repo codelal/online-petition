@@ -8,7 +8,7 @@
 
     function draw(event) {
         //ctx.beginPath();
-        ctx.strokeStyle = "blue";
+        ctx.strokeStyle = "black";
         ctx.lineWidth = 1;
         ctx.lineCap = "round";
         ctx.lineTo(

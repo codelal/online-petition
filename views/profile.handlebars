@@ -1,13 +1,13 @@
  <nav>{{> logout}}</nav>
 <h1>Your profile</h1>
-<h3>If you like, tell us just a little bit more about yourself</h3>
+<h3 class ="profil">Tell us just a little bit more about yourself</h3>
 <h3>{{error}}</h3>
 <form method="POST">
-  <p>age<input type="text" name="age" placeholder = "age", autocomplete="off"></input></p>
- <p>city<input type="text" name="city" placeholder = "city", autocomplete="off"></input></p> 
- <p>You Hompage<input type="text" name="url" placeholder = "Url", autocomplete="off"></input></p>
-   <a href = "/profile/edit">Edit profile</a>
+  <input type="text" name="age" placeholder = "age", autocomplete="off"></input>
+ <input type="text" name="city" placeholder = "city", autocomplete="off"></input> 
+<input type="text" name="url" placeholder = "Url", autocomplete="off"></input>
+ 
    <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <div><button type="submit">Go!</button>
+    <div><button type="submit">Submit</button>
   
 </form>

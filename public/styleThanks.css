@@ -1,27 +1,44 @@
-/**{
-    background-color: rgb(139, 237, 139);
-}*/
 
-h3{
-    margin: 2rem;
+.thanks{
+    padding: 0.4rem;
+    text-transform: uppercase;
+    width: 40rem;
     font-size: 1.5rem;
-}
+    margin-bottom: 1rem;
+    color: rgb(45, 56, 32);
+    text-transform: uppercase;
+    text-shadow: 1px 1px rgb(223, 161, 161);
 
-div{
-    font-size: 1.5rem;
-    margin: 2rem;
 }
 
 .canvas{
-    height:100px;
-    width:400px;
     border:0.15rem solid black;
+    border: 0.1rem solid rgb(97, 19, 19);
+    box-shadow: 0 14px 28px rgba(2, 2, 0, 0.25);
+    border-radius: 7px;
+    color: rgb(64, 76, 51);
+    margin-top: 1rem;
+    }
+
+.delete{
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    padding: 0.1rem;
+    width:15rem;
+}
+.signers a{
+  color: rgb(64, 76, 51);
+padding: 0.1rem;
 }
 
-footer{
-    font-size:1rem;
-    position: absolute;
-    margin-top: 10rem;
-    left:50%;
-    transform: translateX(-50%);
+.signers  {
+    font-size: 1.5rem;
+    padding: 0.2rem;
+    background-color: rgb(239, 231, 231);
+    height:2.2rem;
+    width: 30rem;
+    border: 0.1rem solid rgb(97, 19, 19);
+    box-shadow: 0 14px 28px rgba(2, 2, 0, 0.25);
+    border-radius: 7px;
+  
 }

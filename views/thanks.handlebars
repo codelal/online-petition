@@ -1,11 +1,14 @@
  <nav>{{> logout}}</nav>
-<h3>Thank you for signing!</h3>
+ <div class="flexcontainer">
+<div class="thanks">Thank you for signing!</div>
+</div>
 <img class="canvas" src ="{{dataUrl}}"></img>
 <form method="POST">
 <input type="hidden" name="_csrf" value="{{csrfToken}}">
-<div><button type="submit">Delete Signature</button>
+<div class="flexcontainer">
+<div><button class="delete" type="submit">Delete Signature</button>
 </form>
 {{#rows}}
-<div><a href ="/signers">Click here to see all {{count}} Signers</a></div>
+<div class ="signers"><a  href ="/signers">Click here to see all {{count}} Signatories</a></div>
 {{/rows}}
-
+</div>

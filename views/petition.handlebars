@@ -1,9 +1,9 @@
  <nav>{{> logout}}</nav>
-<h1>Sign our petition to make Berlin a city without cars!</h1>
-<h3>{{noSignature}}</h3>
+
+<h3 class ="noSignature">{{noSignature}}</h3>
 
 <form method="POST">
- <div><canvas id = "canv" width="400" height="100"><input class="canvasInput" type="hidden" name="signature" placeholder = "signature"></input></canvas></div>
+ <div><canvas class="canv" width="500" height="150"><input class="canvasInput" type="hidden" name="signature" placeholder = "signature"></input></canvas></div>
   <input type="hidden" name="_csrf" value="{{csrfToken}}">
-  <button type="submit">Sign now</button>
+  <button class ="submitSignature"type="submit">Sign now</button>
 </form>
