@@ -1,19 +1,19 @@
  <nav>{{> logout}}</nav>
 <h1>Edit your profile</h1> 
-<h3><a href ="/edit">{{error}}</a></h3>
+<h3 class="err"><a href ="/profile/edit">{{error}}</a></h3>
 
 
-<form class ="edit" method="POST">
+<form  method="POST">
    {{#rows}}  
-   <input type="text" name="firstName" value = "{{first}}"" autocomplete="off"></input>
- <input type="text" name="lastName" value = "{{last}}" autocomplete="off"></input>
- <input type="email" name="email" value = "{{email}}"" autocomplete="off"></input>
-    <input type="password" name="password" placeholder = "change password", autocomplete="off"></input>
-  <input type="text" name="age" value = "{{age}}"" autocomplete="off"></input>
- <input type="text" name="city" value = "{{city}}" autocomplete="off"></input>
- <input type="text" name="url" value = "{{url}}"" autocomplete="off"></input> 
- <h3><a href ="/edit">{{error}}</a></h3>
+   <div>first names <input class ="edit" type="text" name="firstName" value = "{{first}}"" autocomplete="off"></input></div>
+ <div >last names <input class ="edit" type="text" name="lastName" value = "{{last}}" autocomplete="off"></input></div>
+ <div>emailadress<input class ="edit" type="email" name="email" value = "{{email}}"" autocomplete="off"></input></div>
+   <div>change PW <input class ="edit" type="password" name="password" placeholder = "change password", autocomplete="off"></input></div>
+  <div>You age <input class ="edit1" type="text" name="age" value = "{{age}}"" autocomplete="off"></input></div>
+ <div >You City <input class ="edit2" type="text" name="city" value = "{{city}}" autocomplete="off"></input></div>
+ <div >Hompage <input class ="edit3" type="text" name="url" value = "{{url}}"" autocomplete="off"></input></div>
  {{/rows}}  
   <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <div><button type="submit">Edit Profile!</button>
+    <div class="editButton"><button type="submit">Edit Profile!</button>
 </form>
+
