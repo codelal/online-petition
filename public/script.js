@@ -36,6 +36,6 @@
         ctx.beginPath();
         dataUrl = canvas[0].toDataURL();
         canvasInput.val(dataUrl);
-        //console.log(canvasInput.val());
+       
     });
 })();
