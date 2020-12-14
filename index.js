@@ -241,7 +241,7 @@ app.get("/profile/edit", requireLoggedInUser, (req, res) => {
             res.render("edit", {
                 rows,
             });
-            //console.log("req.body", req.body);
+            
         })
         .catch((err) => {
             console.log("error from getProfileData", err);

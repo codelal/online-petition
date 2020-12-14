@@ -7,7 +7,6 @@
     let clickStart;
 
     function draw(event) {
-        //ctx.beginPath();
         ctx.strokeStyle = "black";
         ctx.lineWidth = 1;
         ctx.lineCap = "round";
