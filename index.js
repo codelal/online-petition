@@ -237,7 +237,6 @@ app.post("/profile", requireLoggedInUser, (req, res) => {
 app.get("/profile/edit", requireLoggedInUser, (req, res) => {
     db.getProfileData(req.session.userId)
         .then(({ rows }) => {
-            //console.log("getProfileData result", rows);
             res.render("edit", {
                 rows,
             });
