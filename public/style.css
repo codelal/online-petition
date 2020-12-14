@@ -15,7 +15,6 @@ nav a{
 nav {
     margin-top: 0.2rem;
     margin-right: 0;
-    margin-left: 70%;
     padding: 0.2rem;
     font-size: 1.3rem;
     font-style: inherit;
@@ -24,11 +23,9 @@ nav {
 
 
 body {
-    height: 100vh;
-    width:100vw;
-    background-image: url("/final.jpg");
-    background-repeat: no-repeat;
-    display: cover;
+width: 100%;
+background-image: url("/final.jpg");
+background-size: cover;
 
 }
 
