@@ -292,7 +292,7 @@ app.post("/profile/edit", requireLoggedInUser, (req, res) => {
             req.session.userId
         )
             .then((result) => {
-                //  console.log("result updateUsersWithoutPassword", result);
+                
             })
             .catch((err) => {
                 console.log("err pdateUsersWithoutPassword", err);
