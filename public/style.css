@@ -49,13 +49,12 @@ h1 {
     
 }
 
-.infoText {
-    background-color: black;
-    font-size: 1.3rem;
-    margin: 5%;
-    border: 0.1rem solid white;
-    padding: 0.3rem;
+.text{
+    font-size: 1.2rem;
+    color: rgba(185, 170, 170, 0.562);
+    text-shadow: 1px 1px rgb(132, 23, 23);
 }
+
 .login a{
     color: rgba(231, 213, 213, 0.562);
     text-shadow: 1px 1px rgb(132, 23, 23);
