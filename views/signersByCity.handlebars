@@ -1,10 +1,8 @@
   <nav>{{> logout}}</nav>
-<h3 class ="clear
-node .
-">Signers from {{city}}</h3>
+<h3 class ="signersFromCity">Signers from {{city}}</h3>
 
 {{#rows}}  
   <div class ="container">
-       <p class="ListNames">{{first}} {{last}}, {{age}}, <a href="{{url}}">{{url}}</a></p>
+       <p class="ListNames">{{first}} {{last}} {{age}}<a href="{{url}}">{{url}}</a></p>
        <div>
   {{/rows}}

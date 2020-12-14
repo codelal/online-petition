@@ -2,7 +2,7 @@
 <h1>Edit your profile</h1> 
 <h3 class="err"><a href ="/profile/edit">{{error}}</a></h3>
 
-
+<div class = "try">
 <form  method="POST">
    {{#rows}}  
    <div>first names <input class ="edit" type="text" name="firstName" value = "{{first}}"" autocomplete="off"></input></div>
@@ -16,4 +16,6 @@
   <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <div class="editButton"><button type="submit">Edit Profile!</button>
 </form>
+</div>
+
 

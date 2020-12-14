@@ -12,10 +12,8 @@ const {
     requireLoggedInUser,
 } = require("./middleware");
 
-
 let dataUrlsignature;
 let validUrlUserHp;
-
 
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
@@ -243,7 +241,7 @@ app.get("/profile/edit", requireLoggedInUser, (req, res) => {
             res.render("edit", {
                 rows,
             });
-            console.log("req.body", req.body);
+            //console.log("req.body", req.body);
         })
         .catch((err) => {
             console.log("error from getProfileData", err);
@@ -269,8 +267,9 @@ app.post("/profile/edit", requireLoggedInUser, (req, res) => {
                 .then(() => {})
                 .catch((err) => {
                     console.log("error in updateUsersWithPassword", err);
-                    res.render("edit", {
-                        error: "Something went wrong, try again!",
+                    res.render("editError", {
+                        error:
+                            "Something went wrong, try again and click here!",
                     });
                 });
         });
@@ -281,8 +280,8 @@ app.post("/profile/edit", requireLoggedInUser, (req, res) => {
             })
             .catch((err) => {
                 console.log("error in updateUserProfiles", err);
-                res.render("edit", {
-                    error: "Something went wrong, try again!",
+                res.render("editError", {
+                    error: "Something went wrong, try again and click here!",
                 });
             });
     } else {
@@ -298,8 +297,8 @@ app.post("/profile/edit", requireLoggedInUser, (req, res) => {
             })
             .catch((err) => {
                 console.log("err pdateUsersWithoutPassword", err);
-                res.render("edit", {
-                    error: "Something went wrong, try again!",
+                res.render("editError", {
+                    error: "Something went wrong, try again and click here!",
                 });
             });
         db.updateUserProfiles(req.session.userId, age, city, url)
@@ -309,8 +308,8 @@ app.post("/profile/edit", requireLoggedInUser, (req, res) => {
             })
             .catch((err) => {
                 console.log("error in updateUserProfiles", err);
-                res.render("edit", {
-                    error: "Something went wrong, try again!",
+                res.render("editError", {
+                    error: "Something went wrong, try again and click here!",
                 });
             });
     }
