@@ -1,6 +1,5 @@
 (function () {
     const canvas = $("canvas");
-    //console.log("canvas", canvas[0].offsetLeft);
     let ctx = canvas[0].getContext("2d");
     let canvasInput = $(".canvasInput");
     let dataUrl;

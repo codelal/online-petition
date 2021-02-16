@@ -12,6 +12,8 @@ const {
     requireLoggedInUser,
 } = require("./middleware");
 
+const error = "Something went wrong, try again!";
+
 let dataUrlsignature;
 let validUrlUserHp;
 
@@ -54,22 +56,28 @@ app.get("/register", requireLoggedOutUser, (req, res) => {
 
 app.post("/register", requireLoggedOutUser, (req, res) => {
     const { firstName, lastName, email, password } = req.body;
-    hash(password)
-        .then((hash) => {
-            db.insertDetails(firstName, lastName, email, hash)
-                .then((result) => {
-                    req.session.userId = result.rows[0].id;
-                    res.redirect("/profile");
-                })
-                .catch(() => {
-                    res.render("register", {
-                        error: "Something went wrong, try again!",
+    if ((firstName, lastName, email, password)) {
+        hash(password)
+            .then((hash) => {
+                db.insertDetails(firstName, lastName, email, hash)
+                    .then((result) => {
+                        req.session.userId = result.rows[0].id;
+                        res.redirect("/profile");
+                    })
+                    .catch(() => {
+                        res.render("register", {
+                            error,
+                        });
                     });
-                });
-        })
-        .catch((err) => {
-            console.log("there is an error in hash", err);
+            })
+            .catch((err) => {
+                console.log("there is an error in hash", err);
+            });
+    } else {
+        res.render("register", {
+            error: "Please fill out all fields correctly!",
         });
+    }
 });
 
 app.get("/login", requireLoggedOutUser, (req, res) => {
@@ -78,44 +86,50 @@ app.get("/login", requireLoggedOutUser, (req, res) => {
 
 app.post("/login", requireLoggedOutUser, (req, res) => {
     const { email, password } = req.body;
-    db.getHashAndIdByEmail(email)
-        .then((hash) => {
-            compare(password, hash.rows[0].password)
-                .then((result) => {
-                    if (result) {
-                        req.session.userId = hash.rows[0].id;
-                        db.checkIfSignatureByUserId(req.session.userId)
-                            .then((r) => {
-                                if (r.rows.length) {
-                                    req.session.sigId = r.rows[0].id;
-                                    res.redirect("/thanks");
-                                } else {
+    if ((email, password)) {
+        db.getHashAndIdByEmail(email)
+            .then((hash) => {
+                compare(password, hash.rows[0].password)
+                    .then((result) => {
+                        if (result) {
+                            req.session.userId = hash.rows[0].id;
+                            db.checkIfSignatureByUserId(req.session.userId)
+                                .then((r) => {
+                                    if (r.rows.length) {
+                                        req.session.sigId = r.rows[0].id;
+                                        res.redirect("/thanks");
+                                    } else {
+                                        res.redirect("/petition");
+                                    }
+                                })
+                                .catch((err) => {
+                                    console.log(
+                                        "error in checkIfSignatureByUserId",
+                                        err
+                                    );
                                     res.redirect("/petition");
-                                }
-                            })
-                            .catch((err) => {
-                                console.log(
-                                    "error in checkIfSignatureByUserId",
-                                    err
-                                );
-                                res.redirect("/petition");
+                                });
+                        } else {
+                            res.render("login", {
+                                error,
                             });
-                    } else {
-                        res.render("login", {
-                            error: "Something went wrong, try again!",
-                        });
-                    }
-                })
-                .catch((err) => {
-                    console.log("error in compare", err);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log("error in compare", err);
+                    });
+            })
+            .catch((err) => {
+                console.log("error in getHashByEmail", err);
+                res.render("login", {
+                    error,
                 });
-        })
-        .catch((err) => {
-            console.log("error in getHashByEmail", err);
-            res.render("login", {
-                error: "Something went wrong, try again!",
             });
+    } else {
+        res.render("register", {
+            error: "Please fill out all fields correctly!",
         });
+    }
 });
 
 app.get(
@@ -133,11 +147,9 @@ app.post(
     requireUnsignedPetition,
     (req, res) => {
         const { signature } = req.body;
-        // console.log(firstName, lastName, signature);
         if (signature) {
             db.insertSignatureAndUserId(signature, req.session.userId)
                 .then((result) => {
-                    //console.log("result from insertSignature", result);
                     req.session.sigId = result.rows[0].id;
                     res.redirect("/thanks");
                 })
@@ -146,7 +158,6 @@ app.post(
                     res.render("petition");
                 });
         } else {
-            //console.log("no signature");
             res.render("petition", {
                 layout: "main",
                 noSignature:
@@ -204,24 +215,21 @@ app.post("/profile", requireLoggedInUser, (req, res) => {
     }
     if (url.startsWith("https://") || url.startsWith("http://")) {
         validUrlUserHp = url;
-        // console.log(validUrlUserHp);
         db.insertDataUserProfile(age, city, validUrlUserHp, req.session.userId)
             .then(() => {
-                //console.log("result1 from Profil insert", result);
                 res.redirect("/petition");
             })
             .catch((err) => {
                 console.log("error from insertDataUserProfile", err);
                 res.render("profile", {
                     layout: "main",
-                    error: "Something went wrong, try again!",
+                    error,
                 });
             });
     } else {
         validUrlUserHp = "";
         db.insertDataUserProfile(age, city, validUrlUserHp, req.session.userId)
             .then(() => {
-                //console.log("result2 from Profil insert", result);
                 res.redirect("/petition");
             })
             .catch((err) => {
@@ -240,7 +248,6 @@ app.get("/profile/edit", requireLoggedInUser, (req, res) => {
             res.render("edit", {
                 rows,
             });
-            
         })
         .catch((err) => {
             console.log("error from getProfileData", err);
@@ -249,10 +256,8 @@ app.get("/profile/edit", requireLoggedInUser, (req, res) => {
 
 app.post("/profile/edit", requireLoggedInUser, (req, res) => {
     let { firstName, lastName, email, password, age, city, url } = req.body;
-    console.log(firstName, lastName, email, password, age, city, url);
     if (age == "") {
         age = null;
-        console.log("age is Null");
     }
     if (password) {
         hash(password).then((hash) => {
@@ -267,8 +272,7 @@ app.post("/profile/edit", requireLoggedInUser, (req, res) => {
                 .catch((err) => {
                     console.log("error in updateUsersWithPassword", err);
                     res.render("editError", {
-                        error:
-                            "Something went wrong, try again and click here!",
+                        error,
                     });
                 });
         });
@@ -280,35 +284,31 @@ app.post("/profile/edit", requireLoggedInUser, (req, res) => {
             .catch((err) => {
                 console.log("error in updateUserProfiles", err);
                 res.render("editError", {
-                    error: "Something went wrong, try again and click here!",
+                    error,
                 });
             });
     } else {
-        // console.log("no password");
         db.updateUsersWithoutPassword(
             firstName,
             lastName,
             email,
             req.session.userId
         )
-            .then((result) => {
-                
-            })
+            .then(() => {})
             .catch((err) => {
                 console.log("err pdateUsersWithoutPassword", err);
                 res.render("editError", {
-                    error: "Something went wrong, try again and click here!",
+                    error,
                 });
             });
         db.updateUserProfiles(req.session.userId, age, city, url)
-            .then((result) => {
-                // console.log(" result updateUserProfiles", result);
+            .then(() => {
                 res.redirect("/thanks");
             })
             .catch((err) => {
                 console.log("error in updateUserProfiles", err);
                 res.render("editError", {
-                    error: "Something went wrong, try again and click here!",
+                    error,
                 });
             });
     }
@@ -347,7 +347,6 @@ app.get("/logout", requireLoggedInUser, (req, res) => {
     res.redirect("/register");
 });
 
-//für jest: jest soll server nicht starten)
 if (require.main == module) {
     app.listen(process.env.PORT || 8080, () =>
         console.log("Petitionserver listening")

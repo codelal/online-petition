@@ -1,21 +1,30 @@
- <nav>{{> logout}}</nav>
-<h1>Edit your profile</h1> 
-<h3 class="err"><a href ="/profile/edit">{{error}}</a></h3>
-
-<div class = "try">
-<form  method="POST">
-   {{#rows}}  
-   <div>first names <input class ="edit" type="text" name="firstName" value = "{{first}}"" autocomplete="off"></input></div>
- <div >last names <input class ="edit" type="text" name="lastName" value = "{{last}}" autocomplete="off"></input></div>
- <div>emailadress<input class ="edit" type="email" name="email" value = "{{email}}"" autocomplete="off"></input></div>
-   <div>change PW <input class ="edit" type="password" name="password" placeholder = "change password", autocomplete="off"></input></div>
-  <div>You age <input class ="edit1" type="text" name="age" value = "{{age}}"" autocomplete="off"></input></div>
- <div >You City <input class ="edit2" type="text" name="city" value = "{{city}}" autocomplete="off"></input></div>
- <div >Hompage <input class ="edit3" type="text" name="url" value = "{{url}}"" autocomplete="off"></input></div>
- {{/rows}}  
-  <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <div class="editButton"><button type="submit">Edit Profile!</button>
+<h1 class="h1-profile">Edit your profile</h1> 
+{{> navbar}}
+<p class="error" id="error-profile">Something went wrong, try again{{error}}</a></p>
+<form id="edit-form" method="POST">
+   {{#rows}} 
+   <div id="edit-label">
+     <label for="first-name">first name<label><br/>
+     <label for="last-name">last name</label><br/>
+     <label for="email">email</label><br/>
+     <label for="password">password</label><br/>
+     <label for="age">age</label><br/>
+     <label for="city">city</label><br/>
+     <label for="homepage">homepage</label><br/>
+   </div> 
+   <div id="edit-input">
+     <input id="first-name" type="text" name="firstName" value="{{first}}" autocomplete="off"/><br/>
+     <input id="last-name" type="text" name="lastName" value="{{last}}" autocomplete="off"/><br/>
+     <input id="email" type="email" name="email" value = "{{email}}" autocomplete="off"/><br/>
+     <input id="password" type="password" name="password" placeholder = "change password" autocomplete="off"/><br/>
+     <input id="age" type="text" name="age" value="{{age}}" autocomplete="off"/><br/>
+     <input id="city" type="text" name="city" value="{{city}}" autocomplete="off"/><br/>
+     <input id="homepage" type="text" name="url" value="{{url}}" autocomplete="off"/><br/>
+     {{/rows}}  
+     <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+     <button id="edit-btn" type="submit">Edit Profile!</button>
+   </div>
 </form>
-</div>
+
 
 

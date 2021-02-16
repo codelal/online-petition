@@ -1,15 +1,8 @@
-<div class="flexcontainer">
-<h1 class="loginPage">Login</h1>
-
-</div>
-<div class ="error">{{error}}</div>
-<div class="flexcontainer">
-
- <div class="loginRegister">
-<form method="POST">
-  <input type="email" name="email" placeholder = "emailadress"required=“”></input>
-   <input type="password" name="password" placeholder = "password" required=“”></input>
-      <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <button type="submit">Login</button>
-    </div>
+<h1 class="h1-login">Login</h1>
+<div class ="error" id="login-error">"Something went wrong, try again!"{{error}}</div>
+<form id="login-form" method="POST">
+  <input type="email" name="email" placeholder = "emailadress"required=“”/>
+  <input type="password" name="password" placeholder = "password" required=“”/>
+  <input type="hidden" name="_csrf" value="{{csrfToken}}"/><br/>
+  <button id="login-btn" type="submit">Login</button>
 </form>

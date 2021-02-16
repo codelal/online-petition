@@ -1,8 +1,9 @@
-  <nav>{{> logout}}</nav>
-<h3 class ="signersFromCity">Signatories from {{city}}</h3>
-
-{{#rows}}  
-  <div class ="container">
-       <p class="ListNames"> <a href="{{url}}">{{first}}</a> {{last}}, {{age}},</p>
-       <div>
-  {{/rows}}
+<h2 class ="h2-signers-list">Signatories from {{city}}</h3>
+ {{> navbar}}
+ <div class ="signers-container">
+   {{#rows}}  
+     <p class="single-signer"><a href="{{url}}">{{first}}</a> {{last}} {{age}}</p>
+   {{/rows}}
+     <p>
+</div>  
+ 

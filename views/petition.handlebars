@@ -1,9 +1,8 @@
  <nav>{{> logout}}</nav>
-
-<h3 class ="noSignature">{{noSignature}}</h3>
-
-<form method="POST">
- <div><canvas class="canv" width="500" height="150"><input class="canvasInput" type="hidden" name="signature" placeholder = "signature"></input></canvas></div>
+{{> navbar}}
+<h3  class ="error" id="no-signature">You still want to think about it? no problem take you time{{noSignature}}</h3>
+<form class="signature-form" method="POST">
+  <canvas width="500" height="150"><input class="canvasInput" type="hidden" name="signature" placeholder = "signature"></input></canvas><br/>
   <input type="hidden" name="_csrf" value="{{csrfToken}}">
-  <button class ="submitSignature"type="submit">Sign now</button>
+  <button id="submit-signature"type="submit">Sign now</button>
 </form>
