@@ -1,5 +1,8 @@
 # Petition
-Online-Petition with registration, login, e-signature, edit profil, list of signatories etc.
+A fictional online-petition with registration, login, make and delete e-signature, edit profil, list of signatories etc. build during the bootcamp. 
 
 # Technologies
 Node.js/Express, PostgreSQL, Handlebars, Canvas, jQuery, 
+
+# Imagebord - GIF 
+![petition](public/petition.gif)

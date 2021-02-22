@@ -1,6 +1,6 @@
 <h1 class="h1-profile">Edit your profile</h1> 
 {{> navbar}}
-<p class="error" id="error-profile">Something went wrong, try again{{error}}</a></p>
+<p class="error" id="error-profile">{{error}}</a></p>
 <form id="edit-form" method="POST">
    {{#rows}} 
    <div id="edit-label">
@@ -22,7 +22,7 @@
      <input id="homepage" type="text" name="url" value="{{url}}" autocomplete="off"/><br/>
      {{/rows}}  
      <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-     <button id="edit-btn" type="submit">Edit Profile!</button>
+     <button id="edit-btn" type="submit">Edit</button>
    </div>
 </form>
 

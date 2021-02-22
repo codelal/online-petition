@@ -2,11 +2,11 @@
 {{> navbar}}
 <h1 class="h1-profile">Your profile</h1>
 <h3>Tell us just a little bit more about yourself</h3>
-<p class="error" id="error-profile">Something went wrong, try again!{{error}}</p>
+<p class="error" id="error-profile">{{error}}</p>
 <form id="profile-form" method="POST">
   <input type="text" name="age" placeholder = "age", autocomplete="off"></input>
   <input type="text" name="city" placeholder = "city", autocomplete="off"></input> 
-  <input type="text" name="url" placeholder = "Url", autocomplete="off"></input>
+  <input type="text" name="url" placeholder = "Homepage", autocomplete="off"></input>
   <input type="hidden" name="_csrf" value="{{csrfToken}}">
   <button type="submit">Submit</button>
 </form>

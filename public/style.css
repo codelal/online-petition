@@ -27,36 +27,40 @@ h1 {
     /* text-shadow: 1px 1px rgb(223, 161, 161); */
     letter-spacing: 0.1rem;
     font-weight: lighter;
-    border: 0.1rem solid white;
+    /* border: 0.1rem solid white; */
     margin-bottom: 1rem;
 }
 
 .text {
-    font-size: 2vw;
+    font-size: 1.5vw;
     font-family: "Montserrat", sans-serif;
     font-weight: 900;
     grid-area: 3/1;
-    align-self: center;
+    align-self: start;
     width: 65vw;
     text-align: justify;
-    border: 0.1rem solid white;
+    /* background-color: rgba(67, 67, 69, 0.7); */
+    padding: 0.3rem;
+    border-radius: 12px;
+    /* border: 0.1rem solid white; */
 }
 
 .login-info {
-    grid-area: 4/1;
-    align-self: center;
+    grid-area: 3/1;
+    align-self: end;
     width: auto;
     font-size: 3vw;
     font-weight: bold;
     text-align: center;
-    height: 6vw;
+    height: 3vw;
+    margin-top: 2rem;
 }
 
 .login a {
     color: white;
 }
 
-.error {
+/* .error {
     font-family: "Montserrat";
     grid-area: 4/1;
     align-self: end;
@@ -70,22 +74,24 @@ h1 {
     padding: 0.3rem;
     background-color: rgb(255, 255, 255, 0.4);
     /*border: 0.2rem solid red; */
+/* } */
+
+input:focus {
+    outline: 0;
 }
 
-input:focus,
 button:focus {
     outline: 0;
 }
 
 form {
     /* border: 0.1rem solid white; */
-    height: auto;
-    grid-area: 5/1/6/1;
-    align-self: center;
+    grid-area: 4/1/6/1;
+    align-self: start;
     justify-content: center;
-    margin-top: 2rem;
-    align-items: center;
-    justify-content: center;
+    /* margin-top: 2rem; */
+    align-items: end;
+    margin-top: 1.5rem;
 }
 
 input::placeholder {
@@ -102,17 +108,18 @@ input {
     border-left-style: hidden;
     border-bottom-style: solid;
     text-align: center;
-    font-size: 2.5vw;
+    font-size: 1.5vw;
     font-family: "Montserrat", sans-serif;
     letter-spacing: -3px;
     font-weight: bolder;
-
-    /* border-radius: 12px; */
+    background-color: rgba(67, 67, 69, 0.7);
+    margin: 1rem;
+    border-radius: 12px;
     /* background-color: rgba(244, 247, 244, 0.3); */
 }
 
 button {
-    max-height: 5rem;
+    max-height: 4rem;
     max-width: 14rem;
     color: white;
     font-size: 3vw;
@@ -123,7 +130,7 @@ button {
     background-color: rgba(244, 247, 244, 0.4);
     border-radius: 12px;
     margin-top: 2rem;
-    border: 0.1rem solid white;
+    /* border: 0.1rem solid white; */
     background-color: rgba(67, 67, 69, 0.7);
     /* margin-left: 50%;
     transform: translateX(-50%); */
@@ -160,7 +167,7 @@ button:hover {
     margin-left: 0%;
     transform: translateX(0%);
     margin-top: 0;
-    border: 0.1rem solid white;
+    /* border: 0.1rem solid white; */
     background-color: rgba(67, 67, 69, 0.7);
 }
 
@@ -186,21 +193,26 @@ nav a {
 }
 
 #profile-form {
-    grid-area: 5/1;
+    grid-area: 4/1;
     /* border: 0.5rem solid white; */
     align-self: end;
+    margin-top: 1rem;
 }
 
 #error-profile {
     grid-area: 3/1;
     align-self: end;
     font-weight: bolder;
+    color: red;
+    font-size: 1.3rem;
+    font-family: "Montserrat", sans-serif;
+    letter-spacing: 0;
 }
 
 h3 {
     grid-area: 4/1;
     align-self: start;
-    font-size: 2.5vw;
+    font-size: 2vw;
     font-family: "Montserrat", sans-serif;
     letter-spacing: -2px;
 }
@@ -211,17 +223,18 @@ h3 {
     grid-area: 4/1/8/1;
     align-self: start;
     background-color: rgba(67, 67, 69, 0.7);
-    border-radius: 5px;
-    padding: 0.4rem;
-    border: 0.1rem solid white;
+    border-radius: 12px;
+    padding: 0.5rem;
+    /* border: 0.1rem solid white; */
 }
 #edit-input input {
     border-top-style: hidden;
     border-left-style: hidden;
     border-right-style: hidden;
     border-bottom: 0.1rem solid white;
-    font-size: 2.2vw;
+    font-size: 1.5vw;
     line-height: 35px;
+    margin: 0.3rem;
 }
 
 #edit-input {
@@ -234,18 +247,22 @@ h3 {
 #edit-label {
     height: 25rem;
     float: left;
-    margin-right: 0.5rem;
+
     /* border: 0.5rem solid white; */
 }
 
 #edit-form label {
-    line-height: 40px;
-    font-size: 3vw;
+    font-family: "Montserrat", sans-serif;
+    margin-right: 0.5rem;
+    font-size: 1.5vw;
+    line-height: 49px;
+    margin: 0.3rem;
 }
 
 #edit-btn {
     margin-top: 0.5rem;
     align-self: end;
+    font-size: 2vw;
     /* color: rgb(67, 65, 81); */
 }
 
@@ -257,7 +274,7 @@ h3 {
 }
 
 canvas {
-    margin-top: 1rem;
+    margin-top: 3rem;
     background-color: #fff;
     border-radius: 7px;
 }
@@ -283,6 +300,8 @@ canvas {
     font-size: 4vw;
     grid-area: 3/1;
     justify-self: center;
+    align-self: end;
+    margin-bottom: 2rem;
 }
 
 .signature-img {
@@ -295,14 +314,18 @@ canvas {
 }
 
 .signers a {
+    grid-area: 3/1;
+    align-self: start;
     padding: 0.1rem;
     font-family: "Montserrat", sans-serif;
     font-size: 1.5vw;
     letter-spacing: -2px;
+    margin-top: 5rem;
+    margin-bottom: 0;
 }
 
 .signers {
-    height: 2.2rem;
+    margin-top:1rem;
     grid-area: 3/1;
     align-self: end;
     color: white;
@@ -310,14 +333,16 @@ canvas {
 
 #delete-form {
     /* border: 1rem solid white; */
-    justify-items: center;
+    grid-area: 5/1;
 }
 
 #delete-btn {
-    grid-area: 5/1;
     justify-self: center;
+    align-self: end;
     background-color: rgba(67, 67, 69, 0.7);
-    border: 0.1rem solid white;
+    margin-top: 3rem;
+    height: auto;
+    font-size: 2.5vw;
 }
 
 /*signers*/
@@ -325,7 +350,7 @@ canvas {
 .h2-signers-list {
     grid-area: 3/1;
     font-family: "Montserrat", sans-serif;
-    font-size: 2.5vw;
+    font-size: 2vw;
     font-weight: bolder;
 
     /* border: 0.3rem solid white; */
@@ -339,8 +364,9 @@ canvas {
     justify-content: start;
     border-radius: 7px;
     background-color: rgba(67, 67, 69, 0.7);
-    border: 0.1rem solid white;
+    /* border: 0.1rem solid white; */
     width: auto;
+    margin-bottom: 1rem;
 }
 
 .container a {
@@ -348,6 +374,6 @@ canvas {
 }
 
 .single-signer {
-    font-size: 3.3vw;
+    font-size: 2.5vw;
     margin: 0.5rem;
 }
