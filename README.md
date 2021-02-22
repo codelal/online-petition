@@ -4,5 +4,5 @@ A fictional online-petition with registration, login, make and delete e-signatur
 # Technologies
 Node.js/Express, PostgreSQL, Handlebars, Canvas, jQuery, 
 
-# Imagebord - GIF 
+# Petition- GIF 
 ![petition](public/petition.gif)
